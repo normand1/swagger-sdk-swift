@@ -8,25 +8,29 @@
 import Foundation
 
 
-/** Analysis of email */
-public class EmailAnalysis: JSONEncodable {
+/** Analysis result for email. Each verdict property is a string PASS|FAIL|GRAY or dynamic error message */
+
+public struct EmailAnalysis: Codable {
+
+    /** Verdict of DomainKeys Identified Mail analysis */
     public var dkimVerdict: String?
+    /** Verdict of Domain-based Message Authentication Reporting and Conformance analysis */
     public var dmarcVerdict: String?
+    /** Verdict of spam ranking analysis */
     public var spamVerdict: String?
+    /** Verdict of Send Policy Framework record spoofing analysis */
     public var spfVerdict: String?
+    /** Verdict of virus scan analysis */
     public var virusVerdict: String?
 
-    public init() {}
-
-    // MARK: JSONEncodable
-    func encodeToJSON() -> AnyObject {
-        var nillableDictionary = [String:AnyObject?]()
-        nillableDictionary["dkimVerdict"] = self.dkimVerdict
-        nillableDictionary["dmarcVerdict"] = self.dmarcVerdict
-        nillableDictionary["spamVerdict"] = self.spamVerdict
-        nillableDictionary["spfVerdict"] = self.spfVerdict
-        nillableDictionary["virusVerdict"] = self.virusVerdict
-        let dictionary: [String:AnyObject] = APIHelper.rejectNil(nillableDictionary) ?? [:]
-        return dictionary
+    public init(dkimVerdict: String?, dmarcVerdict: String?, spamVerdict: String?, spfVerdict: String?, virusVerdict: String?) {
+        self.dkimVerdict = dkimVerdict
+        self.dmarcVerdict = dmarcVerdict
+        self.spamVerdict = spamVerdict
+        self.spfVerdict = spfVerdict
+        self.virusVerdict = virusVerdict
     }
+
+
 }
+

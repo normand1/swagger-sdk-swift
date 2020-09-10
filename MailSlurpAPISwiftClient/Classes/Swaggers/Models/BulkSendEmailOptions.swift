@@ -8,19 +8,20 @@
 import Foundation
 
 
-/** Bulk sending options */
-public class BulkSendEmailOptions: JSONEncodable {
-    public var inboxIds: [NSUUID]?
+/** Options for bulk sending an email from multiple addresses. See regular &#x60;sendEmail&#x60; methods for more information. */
+
+public struct BulkSendEmailOptions: Codable {
+
+    /** Inboxes to send the email from */
+    public var inboxIds: [UUID]?
+    /** Options for the email to be sent */
     public var sendEmailOptions: SendEmailOptions?
 
-    public init() {}
-
-    // MARK: JSONEncodable
-    func encodeToJSON() -> AnyObject {
-        var nillableDictionary = [String:AnyObject?]()
-        nillableDictionary["inboxIds"] = self.inboxIds?.encodeToJSON()
-        nillableDictionary["sendEmailOptions"] = self.sendEmailOptions?.encodeToJSON()
-        let dictionary: [String:AnyObject] = APIHelper.rejectNil(nillableDictionary) ?? [:]
-        return dictionary
+    public init(inboxIds: [UUID]?, sendEmailOptions: SendEmailOptions?) {
+        self.inboxIds = inboxIds
+        self.sendEmailOptions = sendEmailOptions
     }
+
+
 }
+

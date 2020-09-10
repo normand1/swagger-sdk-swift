@@ -8,40 +8,84 @@
 import Foundation
 
 
-public class Email: JSONEncodable {
+/** Email model (also referred to as EmailDto). Represents an email that was received by an inbox. If you want the original SMTP message see the &#x60;getRawEmail&#x60; endpoint. */
+
+public struct Email: Codable {
+
+    /** Smart analysis of email content including spam ratings\&quot; */
     public var analysis: EmailAnalysis?
+    /** List of IDs of attachments found in the email. Use these IDs with the Inbox and Email Controllers to download attachments and attachment meta data such as filesize, name, extension. */
+    public var attachments: [String]?
+    /** List of &#x60;BCC&#x60; recipients email was addressed to */
     public var bcc: [String]?
+    /** The body of the email message */
     public var body: String?
+    /** List of &#x60;CC&#x60; recipients email was addressed to */
     public var cc: [String]?
-    public var createdAt: NSDate?
+    /** Detected character set of the email body such as UTF-8 */
+    public var charset: String?
+    /** When was the email received by MailSlurp */
+    public var createdAt: Date?
+    /** Who the email was sent from */
     public var from: String?
     public var headers: [String:String]?
-    public var id: NSUUID?
-    public var inboxId: NSUUID?
+    /** ID of the email */
+    public var _id: UUID?
+    /** ID of the inbox that received the email */
+    public var inboxId: UUID?
+    /** Was HTML sent in the email body */
+    public var isHTML: Bool?
+    /** Has the email been viewed ever */
+    public var read: Bool?
+    /** The subject line of the email message */
     public var subject: String?
+    /** List of &#x60;To&#x60; recipients email was addressed to */
     public var to: [String]?
-    public var updatedAt: NSDate?
-    public var userId: NSUUID?
+    /** When was the email last updated */
+    public var updatedAt: Date?
+    /** ID of user that email belongs */
+    public var userId: UUID?
 
-    public init() {}
-
-    // MARK: JSONEncodable
-    func encodeToJSON() -> AnyObject {
-        var nillableDictionary = [String:AnyObject?]()
-        nillableDictionary["analysis"] = self.analysis?.encodeToJSON()
-        nillableDictionary["bcc"] = self.bcc?.encodeToJSON()
-        nillableDictionary["body"] = self.body
-        nillableDictionary["cc"] = self.cc?.encodeToJSON()
-        nillableDictionary["createdAt"] = self.createdAt?.encodeToJSON()
-        nillableDictionary["from"] = self.from
-        nillableDictionary["headers"] = self.headers?.encodeToJSON()
-        nillableDictionary["id"] = self.id?.encodeToJSON()
-        nillableDictionary["inboxId"] = self.inboxId?.encodeToJSON()
-        nillableDictionary["subject"] = self.subject
-        nillableDictionary["to"] = self.to?.encodeToJSON()
-        nillableDictionary["updatedAt"] = self.updatedAt?.encodeToJSON()
-        nillableDictionary["userId"] = self.userId?.encodeToJSON()
-        let dictionary: [String:AnyObject] = APIHelper.rejectNil(nillableDictionary) ?? [:]
-        return dictionary
+    public init(analysis: EmailAnalysis?, attachments: [String]?, bcc: [String]?, body: String?, cc: [String]?, charset: String?, createdAt: Date?, from: String?, headers: [String:String]?, _id: UUID?, inboxId: UUID?, isHTML: Bool?, read: Bool?, subject: String?, to: [String]?, updatedAt: Date?, userId: UUID?) {
+        self.analysis = analysis
+        self.attachments = attachments
+        self.bcc = bcc
+        self.body = body
+        self.cc = cc
+        self.charset = charset
+        self.createdAt = createdAt
+        self.from = from
+        self.headers = headers
+        self._id = _id
+        self.inboxId = inboxId
+        self.isHTML = isHTML
+        self.read = read
+        self.subject = subject
+        self.to = to
+        self.updatedAt = updatedAt
+        self.userId = userId
     }
+
+    public enum CodingKeys: String, CodingKey { 
+        case analysis
+        case attachments
+        case bcc
+        case body
+        case cc
+        case charset
+        case createdAt
+        case from
+        case headers
+        case _id = "id"
+        case inboxId
+        case isHTML
+        case read
+        case subject
+        case to
+        case updatedAt
+        case userId
+    }
+
+
 }
+

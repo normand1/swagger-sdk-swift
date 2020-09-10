@@ -8,19 +8,53 @@
 import Foundation
 
 
-/** Preview of an email message. For full message call the message endpoint with a given message id. */
-public class EmailPreview: JSONEncodable {
-    public var created: NSDate?
-    public var id: NSUUID?
+/** Preview of an email message. For full message (including body and attachments) call the &#x60;getEmail&#x60; or other email endpoints with the provided email ID. */
 
-    public init() {}
+public struct EmailPreview: Codable {
 
-    // MARK: JSONEncodable
-    func encodeToJSON() -> AnyObject {
-        var nillableDictionary = [String:AnyObject?]()
-        nillableDictionary["created"] = self.created?.encodeToJSON()
-        nillableDictionary["id"] = self.id?.encodeToJSON()
-        let dictionary: [String:AnyObject] = APIHelper.rejectNil(nillableDictionary) ?? [:]
-        return dictionary
+    /** List of IDs of attachments found in the email. Use these IDs with the Inbox and Email Controllers to download attachments and attachment meta data such as filesize, name, extension. */
+    public var attachments: [String]?
+    /** List of &#x60;BCC&#x60; recipients email was addressed to */
+    public var bcc: [String]?
+    /** List of &#x60;CC&#x60; recipients email was addressed to */
+    public var cc: [String]?
+    /** When was the email received by MailSlurp */
+    public var createdAt: Date?
+    /** Who the email was sent from */
+    public var from: String?
+    /** ID of the email */
+    public var _id: UUID?
+    /** Has the email been viewed ever */
+    public var read: Bool?
+    /** The subject line of the email message */
+    public var subject: String?
+    /** List of &#x60;To&#x60; recipients email was addressed to */
+    public var to: [String]?
+
+    public init(attachments: [String]?, bcc: [String]?, cc: [String]?, createdAt: Date?, from: String?, _id: UUID?, read: Bool?, subject: String?, to: [String]?) {
+        self.attachments = attachments
+        self.bcc = bcc
+        self.cc = cc
+        self.createdAt = createdAt
+        self.from = from
+        self._id = _id
+        self.read = read
+        self.subject = subject
+        self.to = to
     }
+
+    public enum CodingKeys: String, CodingKey { 
+        case attachments
+        case bcc
+        case cc
+        case createdAt
+        case from
+        case _id = "id"
+        case read
+        case subject
+        case to
+    }
+
+
 }
+
