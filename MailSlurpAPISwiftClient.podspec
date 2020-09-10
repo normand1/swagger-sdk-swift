@@ -12,5 +12,5 @@ Pod::Spec.new do |s|
   s.description = 'https://docs.mailslurp.com'
   s.documentation_url = 'https://docs.mailslurp.com'
   s.source_files = 'MailSlurpAPISwiftClient/Classes/**/*.swift'
-  s.dependency 'Alamofire', '~> 3.5.1'
+  s.dependency 'Alamofire', '~> 4.9.1'
 end
